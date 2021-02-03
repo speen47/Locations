@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SquireLocations</string>
+    <string name="line">______</string>
+    <string name="get_directions">Get directions</string>
 </resources>
