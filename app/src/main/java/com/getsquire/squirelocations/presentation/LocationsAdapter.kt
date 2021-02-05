@@ -11,9 +11,11 @@ import com.bumptech.glide.request.RequestOptions
 import com.getsquire.squirelocations.R
 import com.getsquire.squirelocations.Shop
 
-class LocationsAdapter() : RecyclerView.Adapter<LocationViewHolder>() {
+class LocationsAdapter(private val clickListener: (Shop) -> Unit) :
+    RecyclerView.Adapter<LocationViewHolder>() {
 
-    lateinit var locations: List<Shop>
+    private var locations: List<Shop> = emptyList()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocationViewHolder {
         return LocationViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.location_item, parent, false)
@@ -21,11 +23,16 @@ class LocationsAdapter() : RecyclerView.Adapter<LocationViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: LocationViewHolder, position: Int) {
-        holder.bind(locations[position])
+        holder.bind(locations[position], clickListener)
     }
 
     override fun getItemCount(): Int {
         return locations.size
+    }
+
+    fun setList(list: List<Shop>) {
+        locations = list
+        notifyDataSetChanged()
     }
 
 }
@@ -35,7 +42,8 @@ class LocationViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private val address: TextView = view.findViewById(R.id.address)
     private val photoOfLOcation: ImageView = view.findViewById(R.id.image)
 
-    fun bind(shop: Shop) {
+    fun bind(shop: Shop, clickListener: (Shop) -> Unit) {
+        itemView.setOnClickListener { clickListener(shop) }
         nameOfLocation.text = shop.name
         address.text = shop.address?.street
         Glide
